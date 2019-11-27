@@ -1,22 +1,7 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: logdna-rsyslog
-  labels:
-    app: logdna-rsyslog
-spec:
-  type: ClusterIP
-  ports:
-  - port: 514
-    targetPort: 6514
-    name: tcp
-  selector:
-    app: logdna-rsyslog
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: logdna-rsyslog
+  name: logdna-rsyslog-config
 data:
   logdna-url: logs.logdna.com
   rsyslog-config: |+
@@ -30,12 +15,3 @@ data:
 
     # HTTPS forwarding configuration
     action(type="omhttp" server="LDLOGHOST" serverport="443" restpath="logs/ingest?hostname=logdna-rsyslog" dynRestPath="off" usehttps="on" template="logdna_rsyslog" uid="LOGDNA_AGENT_KEY")
-  startup-script: |+
-    #!/bin/ash
-    mkdir -p /etc/rsyslog.d/
-    # Copy file first since mounted ConfigMaps are read-only
-    cp /opt/rsyslog/logdna.conf /etc/rsyslog.d/logdna.conf
-    # Use sed since variables are not allowed inside of rsyslog actions
-    sed -i "s/LOGDNA_AGENT_KEY/$LOGDNA_AGENT_KEY/g" /etc/rsyslog.d/logdna.conf
-    sed -i "s/LDLOGHOST/$LDLOGHOST/g" /etc/rsyslog.d/logdna.conf
-    rsyslogd -n
