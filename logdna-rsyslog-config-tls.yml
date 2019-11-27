@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logdna-rsyslog-config
+data:
+  logdna-url: syslog-a.logdna.com
+  rsyslog-config: |+
+    ### START LogDNA rsyslog logging directives ###
+
+    ## TCP TLS only ##
+    global(
+    DefaultNetstreamDriver="gtls"
+    DefaultNetstreamDriverCAFile="/etc/rootca/ld-root-ca.crt"
+    )
+
+    template(
+    name="LogDNAFormat"
+    type="string"
+    string="<%PRI%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [logdna@48950 key=\"LOGDNA_AGENT_KEY\"] %msg%"
+    )
+
+    action(
+    type="omfwd"
+    template="LogDNAFormat"
+    target="LDLOGHOST"
+    protocol="tcp"
+    port="6514"
+    StreamDriver="gtls"
+    StreamDriverMode="1" # run driver in TLS-only mode
+    StreamDriverAuthMode="x509/name"
+    StreamDriverPermittedPeers="LOGDNA_DOMAIN"
+    )
+    ### END LogDNA rsyslog logging directives ###
