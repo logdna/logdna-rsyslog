@@ -11,7 +11,7 @@ data:
     $InputTCPServerRun 6514
 
     # Transform syslog format to LogDNA format
-    $template logdna_rsyslog,"{\"lines\":[{\"hostname\":\"%HOSTNAME%\",\"app\":\"%APP-NAME%\",\"level\":\"%SYSLOGSEVERITY-TEXT%\",\"timestamp\":\"%TIMESTAMP:::date-rfc3339%\",\"line\":\"%msg:::json%\"}]}"
+    $template logdna_rsyslog,"{\"lines\":[{\"hostname\":\"%HOSTNAME%\",\"app\":\"%APP-NAME%\",\"level\":\"%SYSLOGSEVERITY-TEXT%\",\"timestamp\":\"%timegenerated:::date-rfc3339%\",\"line\":\"%msg:::json%\"}]}"
 
     # HTTPS forwarding configuration
     action(type="omhttp" server="LDLOGHOST" serverport="443" restpath="logs/ingest?hostname=logdna-rsyslog" dynRestPath="off" usehttps="on" template="logdna_rsyslog" uid="LOGDNA_AGENT_KEY")
