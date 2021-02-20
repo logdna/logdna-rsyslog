@@ -106,9 +106,7 @@ data:
     # Generate domain name to whitelist for TLS
     LOGDNA_DOMAIN='*.'$(echo $LDLOGHOST | cut -d '.' -f2-)
     # Use sed since variables are not allowed inside of rsyslog actions
-    sed -i "s/LOGDNA_AGENT_KEY/$LOGDNA_AGENT_KEY/g" /etc/rsyslog.d/logdna.conf
-    sed -i "s/LDLOGHOST/$LDLOGHOST/g" /etc/rsyslog.d/logdna.conf
-    sed -i "s/LOGDNA_DOMAIN/$LOGDNA_DOMAIN/g" /etc/rsyslog.d/logdna.conf
+    sed -i "s/LOGDNA_AGENT_KEY/$LOGDNA_AGENT_KEY/g;s/LDLOGHOST/$LDLOGHOST/g;s/LOGDNA_DOMAIN/$LOGDNA_DOMAIN/g" /etc/rsyslog.d/logdna.conf
     rsyslogd -n
 ---
 apiVersion: apps/v1
