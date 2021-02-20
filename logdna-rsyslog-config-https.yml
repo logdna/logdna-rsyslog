@@ -6,9 +6,11 @@ data:
   logdna-url: logs.logdna.com
   rsyslog-config: |+
     # Host TCP server and http forwarder
-    $ModLoad imtcp
+    module(load="imtcp")
+    module(load="imudp")
     module(load="omhttp")
     $InputTCPServerRun 6514
+    $UDPServerRun 6514
 
     # Transform syslog format to LogDNA format
     $template logdna_rsyslog,"{\"lines\":[{\"hostname\":\"%HOSTNAME%\",\"app\":\"%APP-NAME%\",\"level\":\"%SYSLOGSEVERITY-TEXT%\",\"timestamp\":\"%timegenerated:::date-rfc3339%\",\"line\":\"%msg:::json%\"}]}"
