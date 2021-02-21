@@ -16,7 +16,7 @@ data:
     template(
     name="LogDNAFormat"
     type="string"
-    string="<%PRI%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [logdna@48950 key=\"LOGDNA_AGENT_KEY\"] %msg%"
+    string="<%PRI%>%protocol-version% %timegenerated:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [logdna@48950 key=\"LOGDNA_AGENT_KEY\"] %msg%"
     )
 
     action(

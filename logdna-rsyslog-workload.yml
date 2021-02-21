@@ -1,15 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: logdna-rsyslog
+  name: logdna-rsyslog-tcp
   labels:
     app: logdna-rsyslog
 spec:
   type: ClusterIP
   ports:
-  - port: 514
+  - name: tcp
+    port: 514
+    protocol: tcp
     targetPort: 6514
-    name: tcp
+  selector:
+    app: logdna-rsyslog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logdna-rsyslog-udp
+  labels:
+    app: logdna-rsyslog
+spec:
+  type: ClusterIP
+  ports:
+  - name: udp
+    port: 514
+    protocol: udp
+    targetPort: 6514
   selector:
     app: logdna-rsyslog
 ---
@@ -106,9 +123,7 @@ data:
     # Generate domain name to whitelist for TLS
     LOGDNA_DOMAIN='*.'$(echo $LDLOGHOST | cut -d '.' -f2-)
     # Use sed since variables are not allowed inside of rsyslog actions
-    sed -i "s/LOGDNA_AGENT_KEY/$LOGDNA_AGENT_KEY/g" /etc/rsyslog.d/logdna.conf
-    sed -i "s/LDLOGHOST/$LDLOGHOST/g" /etc/rsyslog.d/logdna.conf
-    sed -i "s/LOGDNA_DOMAIN/$LOGDNA_DOMAIN/g" /etc/rsyslog.d/logdna.conf
+    sed -i "s/LOGDNA_AGENT_KEY/$LOGDNA_AGENT_KEY/g;s/LDLOGHOST/$LDLOGHOST/g;s/LOGDNA_DOMAIN/$LOGDNA_DOMAIN/g" /etc/rsyslog.d/logdna.conf
     rsyslogd -n
 ---
 apiVersion: apps/v1
