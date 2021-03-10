@@ -9,7 +9,7 @@ spec:
   ports:
   - name: tcp
     port: 514
-    protocol: tcp
+    protocol: TCP
     targetPort: 6514
   selector:
     app: logdna-rsyslog
@@ -25,7 +25,7 @@ spec:
   ports:
   - name: udp
     port: 514
-    protocol: udp
+    protocol: UDP
     targetPort: 6514
   selector:
     app: logdna-rsyslog
