@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.13.7
 LABEL maintainer="help@logdna.com"
 RUN apk --no-cache update  \
     && apk add --no-cache \
